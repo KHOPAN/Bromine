@@ -187,7 +187,7 @@ public abstract class RootItem<T extends RootItem<T>> extends Item<T> {
 				if(item != this.focusedItem) {
 					if(item.focused) {
 						item.focused = false;
-						this.focusedItem.onFocusGained();
+						this.focusedItem.onFocusLost();
 					}
 				}
 			}
