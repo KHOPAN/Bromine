@@ -260,7 +260,7 @@ public class TextField extends ModernItem<TextField> {
 		this.caret.spacing = spacing;
 		this.lineHeight = fontHeight + spacing;
 
-		if(this.multiline) {
+		if(!this.multiline) {
 			this.centerOffset = (int) Math.round((this.bounds.height - ((double) fontHeight)) * 0.5d - ((double) spacing));
 		}
 	}
