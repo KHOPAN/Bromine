@@ -181,4 +181,9 @@ public abstract class Item<T extends Item<T>> {
 		this.render(area);
 		this.renderTop(area);
 	}
+
+	void unfocus(Item<?> exclude) {
+		this.focused = false;
+		this.onFocusLost();
+	}
 }

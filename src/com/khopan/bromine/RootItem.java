@@ -68,7 +68,7 @@ public abstract class RootItem<T extends RootItem<T>> extends Item<T> {
 
 		if(!item.focused) {
 			item.focused = true;
-			this.focusedItem.onFocusGained();
+			item.onFocusGained();
 		}
 
 		this.update();
@@ -164,33 +164,45 @@ public abstract class RootItem<T extends RootItem<T>> extends Item<T> {
 				}
 			}
 		} else if(mouse.action == Mouse.ACTION_PRESSED) {
+			int focused = -1;
+
 			for(int i = 0; i < this.itemList.size(); i++) {
 				Item<?> item = this.itemList.get(i);
 
 				if(item.bounds.contains(mouse.location) && item.entered) {
-					this.focusedItem = item;
-
-					if(!item.focused) {
-						item.focused = true;
-						this.focusedItem.onFocusGained();
-					}
-
+					focused = i;
 					item.pressed = true;
 					item.mouseAction(new Mouse(mouse.button, mouse.clickCount, Mouse.ACTION_PRESSED, mouse.screenLocation, mouse.modifiers, mouse.extendedModifiers, new Point(mouse.x - item.bounds.x, mouse.y - item.bounds.y), System.currentTimeMillis(), 0, 0, 0, 0.0d));
 					this.update();
 				}
 			}
 
-			for(int i = 0; i < this.itemList.size(); i++) {
+
+			if(focused != -1) {
+				Item<?> item = this.itemList.get(focused);
+				this.unfocusAll(item);
+				item.focused = true;
+				item.onFocusGained();
+				this.focusedItem = item;
+			}
+
+			/*for(int i = 0; i < this.itemList.size(); i++) {
 				Item<?> item = this.itemList.get(i);
 
-				if(item != this.focusedItem) {
+				if(focused == i) {
+					if(!item.focused) {
+						this.focusedItem = item;
+						item.focused = true;
+						item.onFocusGained();
+					}
+				} else {
 					if(item.focused) {
 						item.focused = false;
-						this.focusedItem.onFocusLost();
+						System.out.println("On Focus Lost " + item.getClass());
+						item.onFocusLost();
 					}
 				}
-			}
+			}*/
 		} else if(mouse.action == Mouse.ACTION_RELEASED) {
 			for(int i = 0; i < this.itemList.size(); i++) {
 				Item<?> item = this.itemList.get(i);
@@ -211,6 +223,25 @@ public abstract class RootItem<T extends RootItem<T>> extends Item<T> {
 				if(item.bounds.contains(mouse.location) && item.entered) {
 					item.mouseAction(new Mouse(0, 0, Mouse.ACTION_WHEEL_MOVED, mouse.screenLocation, mouse.modifiers, mouse.extendedModifiers, new Point(mouse.x - item.bounds.x, mouse.y - item.bounds.y), System.currentTimeMillis(), mouse.scrollType, mouse.scrollAmount, mouse.wheelRotation, mouse.preciseWheelRotation));
 				}
+			}
+		}
+	}
+
+	void unfocusAll(Item<?> exclude) {
+		if(this.parent != null) {
+			this.parent.unfocusAll(exclude);
+		}
+	}
+
+	@Override
+	void unfocus(Item<?> exclude) {
+		super.unfocus(exclude);
+
+		for(int i = 0; i < this.itemList.size(); i++) {
+			Item<?> item = this.itemList.get(i);
+
+			if(item != exclude) {
+				item.unfocus(exclude);
 			}
 		}
 	}

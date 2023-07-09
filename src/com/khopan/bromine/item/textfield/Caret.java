@@ -69,7 +69,9 @@ class Caret {
 		});
 
 		this.caretBounds = new Rectangle();
-		new Thread(this :: blink).start();
+		Thread thread = new Thread(this :: blink);
+		thread.setPriority(1);
+		thread.start();
 	}
 
 	void show() {
