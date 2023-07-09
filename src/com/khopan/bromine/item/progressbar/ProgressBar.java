@@ -66,7 +66,7 @@ public class ProgressBar extends ModernItem<ProgressBar> {
 
 	@Override
 	protected void onThemeUpdate(Theme theme) {
-		if(this.shouldRender()) {
+		if(this.visibility) {
 			this.foreground.begin(this.theme.getColor(Theme.KEY_PRIMARY));
 			this.background.begin(this.theme.getColor(Theme.KEY_ITEM_BACKGROUND_COLOR));
 			this.border.begin(this.theme.getColor(Theme.KEY_HOVERED_ITEM_BORDER_COLOR));
@@ -88,7 +88,7 @@ public class ProgressBar extends ModernItem<ProgressBar> {
 
 			this.progress = progress;
 
-			if(this.shouldRender()) {
+			if(this.visibility) {
 				this.progressInterpolator.begin(this.progress);
 				this.progressTransform.begin(0.0d, 1.0d);
 			} else {
