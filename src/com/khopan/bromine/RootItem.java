@@ -69,21 +69,12 @@ public abstract class RootItem<T extends RootItem<T>> extends Item<T> {
 		this.update();
 	}
 
-	protected void updateItemVisibility() {
-		for(int i = 0; i < this.itemList.size(); i++) {
-			Item<?> item = this.itemList.get(i);
-			item.renderable = this.bounds.intersects(item.bounds);
-		}
-	}
-
 	@Override
 	protected void render(Area area) {
-		this.updateItemVisibility();
-
 		for(int i = 0; i < this.itemList.size(); i++) {
 			Item<?> item = this.itemList.get(i);
 
-			if(item.shouldRender()) {
+			if(item.visibility) {
 				item.render(area.create(item.bounds.x, item.bounds.y, item.bounds.width, item.bounds.height));
 			}
 		}

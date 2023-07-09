@@ -23,7 +23,6 @@ public abstract class Item<T extends Item<T>> {
 	protected RootItem<?> parent;
 	protected Theme theme;
 	protected boolean visibility;
-	protected boolean renderable;
 
 	public Item() {
 		this.theme = LightTheme.THEME;
@@ -122,7 +121,7 @@ public abstract class Item<T extends Item<T>> {
 	}
 
 	public void update() {
-		if(this.parent != null && this.shouldRender()) {
+		if(this.parent != null && this.visibility) {
 			this.parent.update();
 		}
 	}
@@ -131,10 +130,6 @@ public abstract class Item<T extends Item<T>> {
 		if(this.parent != null) {
 			this.parent.requestFocus(this);
 		}
-	}
-
-	protected boolean shouldRender() {
-		return this.visibility && this.renderable;
 	}
 
 	protected void onVisibilityUpdate(boolean visible) {
