@@ -6,12 +6,10 @@ import com.khopan.bromine.Item;
 import com.khopan.bromine.RootItem;
 
 public class MenuLayout extends Layout {
-	public static final MenuLayout INSTANCE = new MenuLayout();
-
 	private final int barSize;
 
-	private MenuLayout() {
-		this.barSize = 25;
+	public MenuLayout(int barSize) {
+		this.barSize = barSize;
 	}
 
 	@Override
