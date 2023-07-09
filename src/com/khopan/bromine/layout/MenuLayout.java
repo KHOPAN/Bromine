@@ -20,40 +20,40 @@ public class MenuLayout extends Layout {
 	}
 
 	@Override
-	public void layoutItem(int index, int itemSize, Item<?> item, RootItem<?> parent) {
-		if(itemSize == 1) {
+	public void layoutItemByItem(int index, int count, Item<?> item, RootItem<?> rootItem) {
+		if(count == 1) {
 			if(index == 0) {
 				Rectangle bounds = item.bounds().get();
 				bounds.x = 0;
 				bounds.y = 0;
-				bounds.setSize(parent.size().get());
+				bounds.setSize(rootItem.size().get());
 				item.bounds().set(bounds);
 			}
-		} else if(itemSize == 2) {
+		} else if(count == 2) {
 			if(index == 0) {
-				item.bounds().set(new Rectangle(0, 0, parent.width().get(), this.barSize));
+				item.bounds().set(new Rectangle(0, 0, rootItem.width().get(), this.barSize));
 			} else if(index == 1) {
 				Rectangle bounds = item.bounds().get();
 				bounds.x = 0;
 				bounds.y = this.barSize;
-				bounds.setSize(parent.size().get());
+				bounds.setSize(rootItem.size().get());
 				bounds.height -= this.barSize;
 				item.bounds().set(bounds);
 			}
-		} else if(itemSize == 3) {
+		} else if(count == 3) {
 			if(index == 0) {
-				item.bounds().set(new Rectangle(0, 0, parent.width().get(), this.barSize));
+				item.bounds().set(new Rectangle(0, 0, rootItem.width().get(), this.barSize));
 			} else if(index == 1) {
 				Rectangle bounds = item.bounds().get();
 				bounds.x = 0;
 				bounds.y = this.barSize;
-				bounds.setSize(parent.size().get());
+				bounds.setSize(rootItem.size().get());
 				bounds.height -= this.barSize * 2;
 				item.bounds().set(bounds);
 			} else if(index == 2) {
 				Rectangle bounds = item.bounds().get();
 				bounds.x = 0;
-				bounds.setSize(parent.size().get());
+				bounds.setSize(rootItem.size().get());
 				bounds.y = bounds.height - this.barSize;
 				bounds.height = this.barSize;
 				item.bounds().set(bounds);

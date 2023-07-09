@@ -1,5 +1,6 @@
 package com.khopan.bromine.layout;
 
+import java.awt.Dimension;
 import java.awt.Rectangle;
 
 import com.khopan.bromine.Item;
@@ -18,11 +19,11 @@ public class CenterLayout extends Layout {
 	}
 
 	@Override
-	public void layoutItem(int index, int itemSize, Item<?> item, RootItem<?> parent) {
+	public void layoutItemByItem(int index, int count, Item<?> item, RootItem<?> rootItem) {
 		Rectangle bounds = item.bounds().get();
-		Rectangle parentBounds = parent.bounds().get();
-		bounds.x = (int) Math.round((((double) parentBounds.width) - ((double) bounds.width)) * 0.5d);
-		bounds.y = (int) Math.round((((double) parentBounds.height) - ((double) bounds.height)) * 0.5d);
+		Dimension rootSize = rootItem.size().get();
+		bounds.x = (int) Math.round((((double) rootSize.width) - ((double) bounds.width)) * 0.5d);
+		bounds.y = (int) Math.round((((double) rootSize.height) - ((double) bounds.height)) * 0.5d);
 		item.bounds().set(bounds);
 	}
 }

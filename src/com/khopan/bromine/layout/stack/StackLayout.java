@@ -21,7 +21,7 @@ public class StackLayout extends Layout {
 	private int total;
 
 	@Override
-	public void layoutItem(int index, int itemSize, Item<?> item, RootItem<?> parent) {
+	public void layoutItemByItem(int index, int itemSize, Item<?> item, RootItem<?> parent) {
 		if(index == 0) {
 			this.total = 0;
 		}

@@ -2,6 +2,7 @@ package com.khopan.bromine;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.khopan.bromine.area.Area;
@@ -53,6 +54,10 @@ public abstract class RootItem<T extends RootItem<T>> extends Item<T> {
 		return (T) this;
 	}
 
+	public List<Item<?>> itemList() {
+		return Collections.unmodifiableList(this.itemList);
+	}
+
 	@SuppressWarnings("unchecked")
 	public Property<Layout, T> layout() {
 		return new SimpleProperty<Layout, T>(() -> this.layout, layout -> this.layout = layout, (T) this).nullable();
@@ -93,11 +98,19 @@ public abstract class RootItem<T extends RootItem<T>> extends Item<T> {
 
 	protected void layoutItem() {
 		if(this.layout != null) {
-			int size = this.itemList.size();
+			int method = this.layout.getLayoutMethod();
 
-			for(int i = 0; i < size; i++) {
-				Item<?> item = this.itemList.get(i);
-				this.layout.layoutItem(i, size, item, this);
+			if(method == Layout.LAYOUT_METHOD_ITEM_BY_ITEM) {
+				int size = this.itemList.size();
+
+				for(int i = 0; i < size; i++) {
+					Item<?> item = this.itemList.get(i);
+					this.layout.layoutItemByItem(i, size, item, this);
+				}
+			} else if(method == Layout.LAYOUT_METHOD_WHOLE_ROOT_ITEM) {
+				this.layout.layoutWholeRootItem(this, this.itemList);
+			} else {
+				throw new IllegalArgumentException("Invalid layout method: " + method);
 			}
 		}
 	}
