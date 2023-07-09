@@ -17,6 +17,7 @@ import com.khopan.bromine.theme.Theme;
 public abstract class Item<T extends Item<T>> {
 	boolean entered;
 	boolean pressed;
+	boolean focused;
 
 	protected final Rectangle bounds;
 

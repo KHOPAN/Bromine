@@ -65,7 +65,12 @@ public abstract class RootItem<T extends RootItem<T>> extends Item<T> {
 
 	void requestFocus(Item<?> item) {
 		this.focusedItem = item;
-		this.focusedItem.onFocusGained();
+
+		if(!item.focused) {
+			item.focused = true;
+			this.focusedItem.onFocusGained();
+		}
+
 		this.update();
 	}
 
@@ -159,26 +164,31 @@ public abstract class RootItem<T extends RootItem<T>> extends Item<T> {
 				}
 			}
 		} else if(mouse.action == Mouse.ACTION_PRESSED) {
-			boolean setFocus = false;
-
 			for(int i = 0; i < this.itemList.size(); i++) {
 				Item<?> item = this.itemList.get(i);
 
 				if(item.bounds.contains(mouse.location) && item.entered) {
 					this.focusedItem = item;
-					this.focusedItem.onFocusGained();
-					setFocus = true;
+
+					if(!item.focused) {
+						item.focused = true;
+						this.focusedItem.onFocusGained();
+					}
+
 					item.pressed = true;
 					item.mouseAction(new Mouse(mouse.button, mouse.clickCount, Mouse.ACTION_PRESSED, mouse.screenLocation, mouse.modifiers, mouse.extendedModifiers, new Point(mouse.x - item.bounds.x, mouse.y - item.bounds.y), System.currentTimeMillis(), 0, 0, 0, 0.0d));
 					this.update();
 				}
 			}
 
-			if(!setFocus) {
-				this.focusedItem = null;
+			for(int i = 0; i < this.itemList.size(); i++) {
+				Item<?> item = this.itemList.get(i);
 
-				for(int i = 0; i < this.itemList.size(); i++) {
-					this.itemList.get(i).onFocusLost();
+				if(item != this.focusedItem) {
+					if(item.focused) {
+						item.focused = false;
+						this.focusedItem.onFocusGained();
+					}
 				}
 			}
 		} else if(mouse.action == Mouse.ACTION_RELEASED) {
