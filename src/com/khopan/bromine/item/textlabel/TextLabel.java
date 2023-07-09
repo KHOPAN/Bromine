@@ -15,6 +15,7 @@ public class TextLabel extends Item<TextLabel> {
 	private final ColorTransform transform;
 
 	private Font font;
+	private String text;
 	private Color color;
 
 	public TextLabel() {
@@ -29,10 +30,15 @@ public class TextLabel extends Item<TextLabel> {
 		});
 
 		this.font = new Font(Font.SANS_SERIF, Font.PLAIN, 10);
+		this.text = "";
 	}
 
 	public Property<Font, TextLabel> font() {
 		return new SimpleProperty<Font, TextLabel>(() -> this.font, font -> this.font = font, font -> this.update(), this).nullable().whenNull(new Font(Font.SANS_SERIF, Font.PLAIN, 10));
+	}
+
+	public Property<String, TextLabel> text() {
+		return new SimpleProperty<String, TextLabel>(() -> this.text, text -> this.text = text, text -> this.update(), this).nullable().whenNull("");
 	}
 
 	@Override
@@ -45,6 +51,6 @@ public class TextLabel extends Item<TextLabel> {
 		area.smooth();
 		area.font(this.font);
 		area.color(this.color);
-		area.textCenter("Label:");
+		area.textCenter(this.text);
 	}
 }
