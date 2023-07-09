@@ -23,7 +23,7 @@ import com.khopan.bromine.input.Mouse;
 import com.khopan.bromine.property.Property;
 import com.khopan.bromine.property.SimpleProperty;
 
-public class Window extends RootItem<Window> {
+public class Window extends PaneItem<Window> {
 	public static final Image DEFAULT_ICON = Bromine.getLogo(32, 0xFFFFFF);
 
 	private final JFrame frame;
