@@ -4,8 +4,8 @@
 #include "exception.h"
 
 typedef struct {
-	LPCWSTR className;
-} HBROMINE;
+	LPWSTR className;
+} HBROMINE, *PHBROMINE;
 
 extern HINSTANCE globalInstance;
 
@@ -99,7 +99,16 @@ void Window_buildWindow(JNIEnv* const environment, const jobject windowInstance,
 		return;
 	}
 
-	(*environment)->SetLongField(environment, windowInstance, handleField, (jlong) window);
+	PHBROMINE bromine = LocalAlloc(LMEM_FIXED, sizeof(HBROMINE));
+
+	if(!bromine) {
+		BromineThrowWin32Error(environment, L"LocalAlloc");
+		LocalFree(classNameNative);
+		return;
+	}
+
+	bromine->className = classNameNative;
+	(*environment)->SetLongField(environment, windowInstance, handleField, (jlong) bromine);
 }
 
 void Window_messageLoop(JNIEnv* const environment, const jobject windowInstance) {
@@ -115,11 +124,18 @@ void Window_messageLoop(JNIEnv* const environment, const jobject windowInstance)
 		return;
 	}
 
-	HWND window = (HWND) (*environment)->GetLongField(environment, windowInstance, handleField);
+	PHBROMINE bromine = (PHBROMINE) (*environment)->GetLongField(environment, windowInstance, handleField);
 	MSG message;
 
 	while(GetMessageW(&message, NULL, 0, 0)) {
 		TranslateMessage(&message);
 		DispatchMessageW(&message);
 	}
+
+	if(!UnregisterClassW(bromine->className, globalInstance)) {
+		BromineThrowWin32Error(environment, L"UnregisterClassW");
+	}
+
+	LocalFree(bromine->className);
+	LocalFree(bromine);
 }
