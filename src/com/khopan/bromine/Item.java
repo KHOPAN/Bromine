@@ -1,15 +1,17 @@
 package com.khopan.bromine;
 
-public abstract class Item {
+public abstract class Item<T extends Item<T>> {
 	public Item() {
 
 	}
 
-	public void show() {
-
+	@SuppressWarnings("unchecked")
+	public T show() {
+		return (T) this;
 	}
 
-	public void hide() {
-
+	@SuppressWarnings("unchecked")
+	public T hide() {
+		return (T) this;
 	}
 }

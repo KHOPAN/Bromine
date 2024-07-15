@@ -2,7 +2,7 @@ package com.khopan.bromine;
 
 import java.lang.annotation.Native;
 
-public class Window extends RootItem {
+public class Window extends RootItem<Window> {
 	private String title;
 	private String className;
 	private boolean built;
@@ -19,30 +19,35 @@ public class Window extends RootItem {
 		this.setClassName(className);
 	}
 
-	public void setTitle(String title) {
+	public Window setTitle(String title) {
 		this.title = title;
+		return this;
 	}
 
-	public void setClassName(String className) {
+	public Window setClassName(String className) {
 		this.className = className;
+		return this;
 	}
 
 	@Override
-	public void show() {
+	public Window show() {
 		this.showWindow();
+		return this;
 	}
 
-	public void build() {
+	public Window build() {
 		if(this.built) {
 			throw new RuntimeException("The window was already built");
 		}
 
 		this.buildWindow(this.className);
 		this.built = true;
+		return this;
 	}
 
-	public void loop() {
+	public Window loop() {
 		this.messageLoop();
+		return this;
 	}
 
 	private native void showWindow();
