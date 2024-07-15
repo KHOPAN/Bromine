@@ -127,6 +127,7 @@ void Window_buildWindow(JNIEnv* const environment, const jobject windowInstance,
 	windowClass.lpfnWndProc = windowProcedure;
 	windowClass.hInstance = globalInstance;
 	windowClass.hCursor = LoadCursorW(NULL, IDC_ARROW);
+	windowClass.hbrBackground = (HBRUSH) COLOR_WINDOW;
 	windowClass.lpszClassName = classNameNative;
 
 	if(!RegisterClassW(&windowClass)) {
