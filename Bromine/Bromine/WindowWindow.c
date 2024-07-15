@@ -23,6 +23,18 @@ static LRESULT CALLBACK windowProcedure(HWND window, UINT message, WPARAM wparam
 }
 
 void Window_buildWindow(JNIEnv* const environment, const jobject windowInstance, const jstring className) {
+	jclass classWindow = (*environment)->GetObjectClass(environment, windowInstance);
+
+	if(!classWindow) {
+		return;
+	}
+
+	jfieldID handleField = (*environment)->GetFieldID(environment, classWindow, "handle", "J");
+
+	if(!handleField) {
+		return;
+	}
+	
 	LPWSTR classNameNative;
 	jint length;
 
@@ -64,6 +76,16 @@ void Window_buildWindow(JNIEnv* const environment, const jobject windowInstance,
 		classNameNative[13] = 0;
 	}
 
+	PHBROMINE bromine = LocalAlloc(LMEM_FIXED, sizeof(HBROMINE));
+
+	if(!bromine) {
+		BromineThrowWin32Error(environment, L"LocalAlloc");
+		LocalFree(classNameNative);
+		return;
+	}
+
+	bromine->className = classNameNative;
+	(*environment)->SetLongField(environment, windowInstance, handleField, (jlong) bromine);
 	WNDCLASSW windowClass = {0};
 	windowClass.style = CS_VREDRAW | CS_HREDRAW;
 	windowClass.lpfnWndProc = windowProcedure;
@@ -84,31 +106,6 @@ void Window_buildWindow(JNIEnv* const environment, const jobject windowInstance,
 		LocalFree(classNameNative);
 		return;
 	}
-
-	jclass classWindow = (*environment)->GetObjectClass(environment, windowInstance);
-
-	if(!classWindow) {
-		LocalFree(classNameNative);
-		return;
-	}
-
-	jfieldID handleField = (*environment)->GetFieldID(environment, classWindow, "handle", "J");
-
-	if(!handleField) {
-		LocalFree(classNameNative);
-		return;
-	}
-
-	PHBROMINE bromine = LocalAlloc(LMEM_FIXED, sizeof(HBROMINE));
-
-	if(!bromine) {
-		BromineThrowWin32Error(environment, L"LocalAlloc");
-		LocalFree(classNameNative);
-		return;
-	}
-
-	bromine->className = classNameNative;
-	(*environment)->SetLongField(environment, windowInstance, handleField, (jlong) bromine);
 }
 
 void Window_messageLoop(JNIEnv* const environment, const jobject windowInstance) {
