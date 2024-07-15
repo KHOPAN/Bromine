@@ -23,92 +23,83 @@ static LRESULT CALLBACK windowProcedure(HWND window, UINT message, WPARAM wparam
 }
 
 void Window_buildWindow(JNIEnv* const environment, const jobject windowInstance, const jstring className) {
-	LPCWSTR classNameNative;
+	LPWSTR classNameNative;
 	jint length;
 
-	if(className && (length = (*environment)->GetStringLength(environment, className)) && (classNameNative = (*environment)->GetStringChars(environment, className, NULL))) {
-		size_t totalLength = (length + 1) * sizeof(WCHAR);
-		LPWSTR buffer = LocalAlloc(LMEM_FIXED, totalLength);
+	if(className && (length = (*environment)->GetStringLength(environment, className)) && (classNameNative = (LPWSTR) (*environment)->GetStringChars(environment, className, NULL))) {
+		LPWSTR source = classNameNative;
+		size_t totalLength = (((size_t) length) + 1) * sizeof(WCHAR);
+		classNameNative = LocalAlloc(LMEM_FIXED, totalLength);
 
-		if(!buffer) {
+		if(!classNameNative) {
 			BromineThrowWin32Error(environment, L"LocalAlloc");
-			(*environment)->ReleaseStringChars(environment, className, classNameNative);
+			(*environment)->ReleaseStringChars(environment, className, source);
 			return;
 		}
 
-		memcpy(buffer, classNameNative, totalLength);
-		buffer[length] = 0;
-		(*environment)->ReleaseStringChars(environment, className, classNameNative);
-		classNameNative = buffer;
+		memcpy(classNameNative, source, totalLength);
+		classNameNative[length] = 0;
+		(*environment)->ReleaseStringChars(environment, className, source);
 	} else {
-		LPWSTR buffer = LocalAlloc(LMEM_FIXED, sizeof(WCHAR) * 14);
+		classNameNative = LocalAlloc(LMEM_FIXED, sizeof(WCHAR) * 14);
 
-		if(!buffer) {
+		if(!classNameNative) {
 			BromineThrowWin32Error(environment, L"LocalAlloc");
 			return;
 		}
 
-		buffer[0] = L'B';
-		buffer[1] = L'r';
-		buffer[2] = L'o';
-		buffer[3] = L'm';
-		buffer[4] = L'i';
-		buffer[5] = L'n';
-		buffer[6] = L'e';
-		buffer[7] = L'W';
-		buffer[8] = L'i';
-		buffer[9] = L'n';
-		buffer[10] = L'd';
-		buffer[11] = L'o';
-		buffer[12] = L'w';
-		buffer[13] = 0;
-		classNameNative = buffer;
+		classNameNative[0] = L'B';
+		classNameNative[1] = L'r';
+		classNameNative[2] = L'o';
+		classNameNative[3] = L'm';
+		classNameNative[4] = L'i';
+		classNameNative[5] = L'n';
+		classNameNative[6] = L'e';
+		classNameNative[7] = L'W';
+		classNameNative[8] = L'i';
+		classNameNative[9] = L'n';
+		classNameNative[10] = L'd';
+		classNameNative[11] = L'o';
+		classNameNative[12] = L'w';
+		classNameNative[13] = 0;
 	}
 
-	printf("Class Name: %ws\n", classNameNative);
-	LocalFree(classNameNative);
-	/*WNDCLASSW windowClass = {0};
+	WNDCLASSW windowClass = {0};
 	windowClass.style = CS_VREDRAW | CS_HREDRAW;
 	windowClass.lpfnWndProc = windowProcedure;
 	windowClass.hInstance = globalInstance;
 	windowClass.hCursor = LoadCursorW(NULL, IDC_ARROW);
-	const jchar* classNameNative = className ? (*environment)->GetStringChars(environment, className, NULL) : NULL;
-	windowClass.lpszClassName = classNameNative ? classNameNative : L"BromineWindow";
-	ATOM result = RegisterClassW(&windowClass);
+	windowClass.lpszClassName = classNameNative;
 
-	if(!result) {
+	if(!RegisterClassW(&windowClass)) {
 		BromineThrowWin32Error(environment, L"RegisterClassW");
-
-		if(classNameNative) {
-			(*environment)->ReleaseStringChars(environment, className, classNameNative);
-		}
-
+		LocalFree(classNameNative);
 		return;
 	}
 
-	HWND window = CreateWindowExW(0L, windowClass.lpszClassName, L"Bromine Window", WS_OVERLAPPEDWINDOW | WS_VISIBLE, 100, 100, 200, 200, NULL, NULL, NULL, NULL);
-
-	if(classNameNative) {
-		(*environment)->ReleaseStringChars(environment, className, classNameNative);
-	}
+	HWND window = CreateWindowExW(0L, classNameNative, L"Bromine Window", WS_OVERLAPPEDWINDOW | WS_VISIBLE, 100, 100, 200, 200, NULL, NULL, NULL, NULL);
 
 	if(!window) {
 		BromineThrowWin32Error(environment, L"CreateWindowExW");
+		LocalFree(classNameNative);
+		return;
 	}
 
 	jclass classWindow = (*environment)->GetObjectClass(environment, windowInstance);
 
 	if(!classWindow) {
+		LocalFree(classNameNative);
 		return;
 	}
 
 	jfieldID handleField = (*environment)->GetFieldID(environment, classWindow, "handle", "J");
 
 	if(!handleField) {
+		LocalFree(classNameNative);
 		return;
 	}
 
-	(*environment)->SetLongField(environment, windowInstance, handleField, (jlong) window);*/
+	(*environment)->SetLongField(environment, windowInstance, handleField, (jlong) window);
 }
 
 void Window_messageLoop(JNIEnv* const environment, const jobject windowInstance) {
