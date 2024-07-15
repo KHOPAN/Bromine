@@ -144,7 +144,7 @@
     <ClCompile Include="Window.c" />
     <ClCompile Include="Window_buildWindow.c" />
     <ClCompile Include="Window_showWindow.c" />
-    <ClCompile Include="Window_startMessageLoop.c" />
+    <ClCompile Include="Window_messageLoop.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="exception.h" />

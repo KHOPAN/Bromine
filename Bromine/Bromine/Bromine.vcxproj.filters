@@ -30,7 +30,7 @@
     <ClCompile Include="Window_showWindow.c">
       <Filter>Source Files\Window</Filter>
     </ClCompile>
-    <ClCompile Include="Window_startMessageLoop.c">
+    <ClCompile Include="Window_messageLoop.c">
       <Filter>Source Files\Window</Filter>
     </ClCompile>
     <ClCompile Include="exception.c">
