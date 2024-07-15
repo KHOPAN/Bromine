@@ -141,12 +141,15 @@
   <ItemGroup>
     <ClCompile Include="exception.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="Toolkit.c" />
+    <ClCompile Include="Toolkit_getScreenSize.c" />
     <ClCompile Include="Window.c" />
     <ClCompile Include="WindowWindow.c" />
     <ClCompile Include="Window_showWindow.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="exception.h" />
+    <ClInclude Include="Toolkit.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

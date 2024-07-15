@@ -1,5 +1,6 @@
 #include <Windows.h>
 #include "Window.h"
+#include "Toolkit.h"
 
 HINSTANCE globalInstance;
 
@@ -11,5 +12,6 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* virtualMachine, void* reserved) {
 	}
 
 	WindowRegisterNatives(environment);
+	ToolkitRegisterNatives(environment);
 	return JNI_VERSION_21;
 }

@@ -16,6 +16,9 @@
     <Filter Include="Source Files\Window">
       <UniqueIdentifier>{0187e645-f6ff-45a4-8900-429b6c6821c9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Toolkit">
+      <UniqueIdentifier>{98fe6cdd-0267-4fe9-98f4-1b1229784c93}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.c">
@@ -33,12 +36,21 @@
     <ClCompile Include="exception.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Toolkit.c">
+      <Filter>Source Files\Toolkit</Filter>
+    </ClCompile>
+    <ClCompile Include="Toolkit_getScreenSize.c">
+      <Filter>Source Files\Toolkit</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="exception.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Toolkit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
