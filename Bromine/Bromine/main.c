@@ -1,6 +1,12 @@
-#include <stdio.h>
+#include "Window.h"
 
-int main(int argc, char** argv) {
-	printf("Hello, world!\n");
-	return 0;
+JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* virtualMachine, void* reserved) {
+	JNIEnv* environment = NULL;
+
+	if((*virtualMachine)->GetEnv(virtualMachine, (void**) &environment, JNI_VERSION_21) || !environment) {
+		return JNI_ABORT;
+	}
+
+	WindowRegisterNatives(environment);
+	return JNI_VERSION_21;
 }
