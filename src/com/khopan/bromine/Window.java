@@ -45,7 +45,7 @@ public class Window extends RootItem {
 		this.messageLoop();
 	}
 
-	private native void buildWindow(String className);
 	private native void showWindow();
+	private native void buildWindow(String className);
 	private native void messageLoop();
 }

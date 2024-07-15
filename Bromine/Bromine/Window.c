@@ -1,8 +1,8 @@
 #include "Window.h"
 
 static JNINativeMethod NativeMethods[] = {
-	{"buildWindow", "(Ljava/lang/String;)V", (void*) &Window_buildWindow},
 	{"showWindow",  "()V",                   (void*) &Window_showWindow},
+	{"buildWindow", "(Ljava/lang/String;)V", (void*) &Window_buildWindow},
 	{"messageLoop", "()V",                   (void*) &Window_messageLoop}
 };
 
