@@ -34,7 +34,13 @@ void Window_buildWindow(JNIEnv* const environment, const jobject windowInstance,
 	if(!handleField) {
 		return;
 	}
-	
+
+	jfieldID titleField = (*environment)->GetFieldID(environment, classWindow, "title", "Ljava/lang/String;");
+
+	if(!titleField) {
+		return;
+	}
+
 	LPWSTR classNameNative;
 	jint length;
 
@@ -99,7 +105,13 @@ void Window_buildWindow(JNIEnv* const environment, const jobject windowInstance,
 		return;
 	}
 
-	HWND window = CreateWindowExW(0L, classNameNative, L"Bromine Window", WS_OVERLAPPEDWINDOW | WS_VISIBLE, 100, 100, 200, 200, NULL, NULL, NULL, NULL);
+	jobject titleObject = (*environment)->GetObjectField(environment, windowInstance, titleField);
+	const jchar* titleValue = titleObject ? (*environment)->GetStringChars(environment, titleObject, NULL) : NULL;
+	HWND window = CreateWindowExW(0L, classNameNative, titleValue, WS_OVERLAPPEDWINDOW | WS_VISIBLE, 100, 100, 200, 200, NULL, NULL, NULL, NULL);
+
+	if(titleValue) {
+		(*environment)->ReleaseStringChars(environment, titleObject, titleValue);
+	}
 
 	if(!window) {
 		BromineThrowWin32Error(environment, L"CreateWindowExW");

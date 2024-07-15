@@ -3,12 +3,12 @@ package com.khopan.bromine;
 import java.lang.annotation.Native;
 
 public class Window extends RootItem<Window> {
+	@Native
+	private final long handle;
+
 	private String title;
 	private String className;
 	private boolean built;
-
-	@Native
-	private final long handle;
 
 	public Window() {
 		this.handle = 0L;
