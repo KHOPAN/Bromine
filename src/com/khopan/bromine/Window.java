@@ -22,7 +22,7 @@ public class Window extends RootItem {
 	}
 
 	public void build() {
-		this.buildWindow(this.className == null ? "BromineWindow" : this.className);
+		this.buildWindow(this.className);
 	}
 
 	public void loop() {
