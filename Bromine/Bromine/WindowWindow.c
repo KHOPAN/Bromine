@@ -29,6 +29,12 @@ void Window_buildWindow(JNIEnv* const environment, const jobject windowInstance,
 		return;
 	}
 
+	jclass itemClass = (*environment)->FindClass(environment, "com/khopan/bromine/Item");
+
+	if(!itemClass) {
+		return;
+	}
+
 	jfieldID handleField = (*environment)->GetFieldID(environment, classWindow, "handle", "J");
 
 	if(!handleField) {
@@ -38,6 +44,30 @@ void Window_buildWindow(JNIEnv* const environment, const jobject windowInstance,
 	jfieldID titleField = (*environment)->GetFieldID(environment, classWindow, "title", "Ljava/lang/String;");
 
 	if(!titleField) {
+		return;
+	}
+
+	jfieldID xField = (*environment)->GetFieldID(environment, itemClass, "x", "I");
+
+	if(!xField) {
+		return;
+	}
+
+	jfieldID yField = (*environment)->GetFieldID(environment, itemClass, "y", "I");
+
+	if(!yField) {
+		return;
+	}
+
+	jfieldID widthField = (*environment)->GetFieldID(environment, itemClass, "width", "I");
+
+	if(!widthField) {
+		return;
+	}
+
+	jfieldID heightField = (*environment)->GetFieldID(environment, itemClass, "height", "I");
+
+	if(!heightField) {
 		return;
 	}
 
@@ -107,7 +137,7 @@ void Window_buildWindow(JNIEnv* const environment, const jobject windowInstance,
 
 	jobject titleObject = (*environment)->GetObjectField(environment, windowInstance, titleField);
 	const jchar* titleValue = titleObject ? (*environment)->GetStringChars(environment, titleObject, NULL) : NULL;
-	HWND window = CreateWindowExW(0L, classNameNative, titleValue, WS_OVERLAPPEDWINDOW | WS_VISIBLE, 100, 100, 200, 200, NULL, NULL, NULL, NULL);
+	HWND window = CreateWindowExW(0L, classNameNative, titleValue, WS_OVERLAPPEDWINDOW | WS_VISIBLE, (*environment)->GetIntField(environment, windowInstance, xField), (*environment)->GetIntField(environment, windowInstance, yField), (*environment)->GetIntField(environment, windowInstance, widthField), (*environment)->GetIntField(environment, windowInstance, heightField), NULL, NULL, NULL, NULL);
 
 	if(titleValue) {
 		(*environment)->ReleaseStringChars(environment, titleObject, titleValue);
