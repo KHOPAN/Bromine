@@ -33,4 +33,18 @@ void Window_buildWindow(JNIEnv* const environment, const jobject windowInstance,
 	if(!window) {
 		BromineThrowWin32Error(environment, L"CreateWindowExW");
 	}
+
+	jclass classWindow = (*environment)->GetObjectClass(environment, windowInstance);
+
+	if(!classWindow) {
+		return;
+	}
+
+	jfieldID handleField = (*environment)->GetFieldID(environment, classWindow, "handle", "J");
+
+	if(!handleField) {
+		return;
+	}
+
+	(*environment)->SetLongField(environment, windowInstance, handleField, (jlong) window);
 }

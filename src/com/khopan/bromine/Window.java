@@ -1,15 +1,21 @@
 package com.khopan.bromine;
 
+import java.lang.annotation.Native;
+
 public class Window extends RootItem {
 	private String title;
 	private String className;
 	private boolean built;
 
-	public Window() {
+	@Native
+	private final long handle;
 
+	public Window() {
+		this.handle = 0L;
 	}
 
 	public Window(String className) {
+		this();
 		this.setClassName(className);
 	}
 
