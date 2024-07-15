@@ -50,6 +50,10 @@ public class Window extends RootItem<Window> {
 		return this;
 	}
 
+	private void renderWindow() {
+		System.out.println("Render");
+	}
+
 	private native void showWindow();
 	private native void buildWindow(String className);
 	private native void messageLoop();

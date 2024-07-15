@@ -2,6 +2,7 @@ package com.khopan.bromine;
 
 import java.lang.annotation.Native;
 
+import com.khopan.bromine.render.Paint;
 import com.khopan.bromine.unit.Size;
 
 public abstract class Item<T extends Item<T>> {
@@ -57,5 +58,9 @@ public abstract class Item<T extends Item<T>> {
 	@SuppressWarnings("unchecked")
 	public T hide() {
 		return (T) this;
+	}
+
+	public void render(Paint paint) {
+
 	}
 }

@@ -5,11 +5,25 @@
 
 typedef struct {
 	LPWSTR className;
+	JNIEnv* environment;
+	jobject windowInstance;
+	jmethodID renderWindowMethod;
 } HBROMINE, *PHBROMINE;
 
 extern HINSTANCE globalInstance;
 
 static LRESULT CALLBACK windowProcedure(HWND window, UINT message, WPARAM wparam, LPARAM lparam) {
+	PHBROMINE bromine = (PHBROMINE) GetWindowLongPtrW(window, GWLP_USERDATA);
+
+	if(!bromine) {
+		if(message != WM_CREATE) {
+			return DefWindowProcW(window, message, wparam, lparam);
+		}
+
+		bromine = (PHBROMINE) (((CREATESTRUCT*) lparam)->lpCreateParams);
+		SetWindowLongPtrW(window, GWLP_USERDATA, (LONG_PTR) bromine);
+	}
+
 	switch(message) {
 	case WM_CLOSE:
 		DestroyWindow(window);
@@ -17,6 +31,13 @@ static LRESULT CALLBACK windowProcedure(HWND window, UINT message, WPARAM wparam
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		return 0;
+	case WM_PAINT: {
+		PAINTSTRUCT paintStruct;
+		BeginPaint(window, &paintStruct);
+		EndPaint(window, &paintStruct);
+		(*bromine->environment)->CallVoidMethod(bromine->environment, bromine->windowInstance, bromine->renderWindowMethod);
+		return 0;
+	}
 	}
 
 	return DefWindowProcW(window, message, wparam, lparam);
@@ -32,6 +53,12 @@ void Window_buildWindow(JNIEnv* const environment, const jobject windowInstance,
 	jclass itemClass = (*environment)->FindClass(environment, "com/khopan/bromine/Item");
 
 	if(!itemClass) {
+		return;
+	}
+
+	jmethodID renderWindowMethod = (*environment)->GetMethodID(environment, classWindow, "renderWindow", "()V");
+
+	if(!renderWindowMethod) {
 		return;
 	}
 
@@ -121,13 +148,15 @@ void Window_buildWindow(JNIEnv* const environment, const jobject windowInstance,
 	}
 
 	bromine->className = classNameNative;
+	bromine->environment = environment;
+	bromine->windowInstance = windowInstance;
+	bromine->renderWindowMethod = renderWindowMethod;
 	(*environment)->SetLongField(environment, windowInstance, handleField, (jlong) bromine);
 	WNDCLASSW windowClass = {0};
 	windowClass.style = CS_VREDRAW | CS_HREDRAW;
 	windowClass.lpfnWndProc = windowProcedure;
 	windowClass.hInstance = globalInstance;
 	windowClass.hCursor = LoadCursorW(NULL, IDC_ARROW);
-	windowClass.hbrBackground = (HBRUSH) COLOR_WINDOW;
 	windowClass.lpszClassName = classNameNative;
 
 	if(!RegisterClassW(&windowClass)) {
@@ -138,7 +167,7 @@ void Window_buildWindow(JNIEnv* const environment, const jobject windowInstance,
 
 	jobject titleObject = (*environment)->GetObjectField(environment, windowInstance, titleField);
 	const jchar* titleValue = titleObject ? (*environment)->GetStringChars(environment, titleObject, NULL) : NULL;
-	HWND window = CreateWindowExW(0L, classNameNative, titleValue, WS_OVERLAPPEDWINDOW | WS_VISIBLE, (*environment)->GetIntField(environment, windowInstance, xField), (*environment)->GetIntField(environment, windowInstance, yField), (*environment)->GetIntField(environment, windowInstance, widthField), (*environment)->GetIntField(environment, windowInstance, heightField), NULL, NULL, NULL, NULL);
+	HWND window = CreateWindowExW(0L, classNameNative, titleValue, WS_OVERLAPPEDWINDOW | WS_VISIBLE, (*environment)->GetIntField(environment, windowInstance, xField), (*environment)->GetIntField(environment, windowInstance, yField), (*environment)->GetIntField(environment, windowInstance, widthField), (*environment)->GetIntField(environment, windowInstance, heightField), NULL, NULL, NULL, bromine);
 
 	if(titleValue) {
 		(*environment)->ReleaseStringChars(environment, titleObject, titleValue);
