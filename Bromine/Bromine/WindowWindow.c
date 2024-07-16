@@ -62,9 +62,9 @@ static LRESULT CALLBACK windowProcedure(HWND window, UINT message, WPARAM wparam
 		return 0;
 	case WM_PAINT: {
 		PAINTSTRUCT paintStruct;
-		BeginPaint(window, &paintStruct);
+		HDC context = BeginPaint(window, &paintStruct);
+		(*bromine->environment)->CallVoidMethod(bromine->environment, bromine->windowInstance, bromine->renderWindowMethod, (jlong) context);
 		EndPaint(window, &paintStruct);
-		(*bromine->environment)->CallVoidMethod(bromine->environment, bromine->windowInstance, bromine->renderWindowMethod);
 		return 0;
 	}
 	}
@@ -79,7 +79,7 @@ void Window_buildWindow(JNIEnv* const environment, const jobject windowInstance,
 		return;
 	}
 
-	jmethodID renderWindowMethod = (*environment)->GetMethodID(environment, classWindow, "renderWindow", "()V");
+	jmethodID renderWindowMethod = (*environment)->GetMethodID(environment, classWindow, "renderWindow", "(J)V");
 
 	if(!renderWindowMethod) {
 		return;
@@ -177,4 +177,8 @@ void Window_buildWindow(JNIEnv* const environment, const jobject windowInstance,
 		LocalFree(classNameNative);
 		return;
 	}
+}
+
+void Window_dispatchRendering(JNIEnv* const environment, const jobject windowInstance, const jlong handle, const jobjectArray instructions) {
+	jsize length = (*environment)->GetArrayLength(environment, instructions);
 }

@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class InstructedPaint implements Paint {
-	private final Consumer<List<PaintInstruction>> dispatcher;
+	private final Consumer<PaintInstruction[]> dispatcher;
 	private final List<PaintInstruction> list;
 
 	private int color;
 
-	public InstructedPaint(Consumer<List<PaintInstruction>> dispatcher) {
+	public InstructedPaint(Consumer<PaintInstruction[]> dispatcher) {
 		if(dispatcher == null) {
 			throw new NullPointerException("Dispatcher cannot be null");
 		}
@@ -39,6 +39,10 @@ public class InstructedPaint implements Paint {
 			return;
 		}
 
-		this.dispatcher.accept(this.list);
+		PaintInstruction[] array = this.list.toArray(new PaintInstruction[0]);
+
+		if(array != null && array.length > 0) {
+			this.dispatcher.accept(array);
+		}
 	}
 }

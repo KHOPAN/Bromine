@@ -3,6 +3,7 @@ package com.khopan.bromine;
 import java.lang.annotation.Native;
 
 import com.khopan.bromine.render.InstructedPaint;
+import com.khopan.bromine.render.PaintInstruction;
 
 public class Window extends RootItem {
 	@Native
@@ -47,10 +48,11 @@ public class Window extends RootItem {
 	}
 
 	private native void buildWindow(String className, int x, int y, int width, int height);
+	private native void dispatchRendering(long handle, PaintInstruction[] instructions);
 
-	private void renderWindow() {
+	private void renderWindow(long handle) {
 		System.out.println("Render");
-		InstructedPaint paint = new InstructedPaint(list -> {});
+		InstructedPaint paint = new InstructedPaint(list -> this.dispatchRendering(handle, list));
 		paint.fillRect(0, 0, 100, 200);
 		paint.dispatch();
 	}
