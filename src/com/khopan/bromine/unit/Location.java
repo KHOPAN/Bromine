@@ -1,6 +1,6 @@
 package com.khopan.bromine.unit;
 
-public class Location {
+public class Location implements ILocation {
 	public int x;
 	public int y;
 
@@ -14,29 +14,51 @@ public class Location {
 		this.y = y;
 	}
 
-	public Location(Location location) {
-		this.x = location == null ? 0 : location.x;
-		this.y = location == null ? 0 : location.y;
+	public Location(ILocation location) {
+		this.x = location == null ? 0 : location.getX();
+		this.y = location == null ? 0 : location.getY();
 	}
 
-	public Location(Bounds bounds) {
-		this.x = bounds == null ? 0 : bounds.x;
-		this.y = bounds == null ? 0 : bounds.y;
+	@Override
+	public int getX() {
+		return this.x;
 	}
 
-	public Location newLocation() {
+	@Override
+	public int getY() {
+		return this.y;
+	}
+
+	@Override
+	public ILocation getLocation() {
 		return new Location(this.x, this.y);
 	}
 
-	public Bounds newBounds() {
-		return new Bounds(this.x, this.y, 0, 0);
+	@Override
+	public ILocation getLocation(int offsetX, int offsetY) {
+		return new Location(this.x + offsetX, this.y + offsetY);
 	}
 
-	public Bounds newBounds(int width, int height) {
-		return new Bounds(this.x, this.y, width, height);
+	@Override
+	public ILocation getLocation(ILocation offset) {
+		if(offset == null) {
+			return new Location(this.x, this.y);
+		}
+
+		return new Location(this.x + offset.getX(), this.y + offset.getY());
 	}
 
-	public Bounds newBounds(Size size) {
+	@Override
+	public IBounds getBounds(int size) {
+		return new Bounds(this.x, this.y, size);
+	}
+
+	@Override
+	public IBounds getBounds(ISize size) {
+		if(size == null) {
+			return new Bounds(this.x, this.y, 0);
+		}
+
 		return new Bounds(this.x, this.y, size);
 	}
 
@@ -50,5 +72,17 @@ public class Location {
 		builder.append(this.y);
 		builder.append(']');
 		return builder.toString();
+	}
+
+	public static Location getInstance() {
+		return new Location();
+	}
+
+	public static Location of(int x, int y) {
+		return new Location(x, y);
+	}
+
+	public static Location of(ILocation location) {
+		return new Location(location);
 	}
 }

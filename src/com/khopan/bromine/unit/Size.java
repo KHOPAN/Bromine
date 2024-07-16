@@ -1,6 +1,6 @@
 package com.khopan.bromine.unit;
 
-public class Size {
+public class Size implements ISize {
 	public int width;
 	public int height;
 
@@ -19,29 +19,32 @@ public class Size {
 		this.height = height;
 	}
 
-	public Size(Size size) {
-		this.width = size == null ? 0 : size.width;
-		this.height = size == null ? 0 : size.height;
+	public Size(ISize size) {
+		this.width = size == null ? 0 : size.getWidth();
+		this.height = size == null ? 0 : size.getHeight();
 	}
 
-	public Size(Bounds bounds) {
-		this.width = bounds == null ? 0 : bounds.width;
-		this.height = bounds == null ? 0 : bounds.height;
+	@Override
+	public int getWidth() {
+		return this.width;
 	}
 
-	public Size newSize() {
+	@Override
+	public int getHeight() {
+		return this.height;
+	}
+
+	@Override
+	public ISize getSize() {
 		return new Size(this.width, this.height);
 	}
 
-	public Bounds newBounds() {
-		return new Bounds(0, 0, this.width, this.height);
-	}
+	@Override
+	public IBounds getBounds(ILocation location) {
+		if(location == null) {
+			return new Bounds(0, 0, this.width, this.height);
+		}
 
-	public Bounds newBounds(int x, int y) {
-		return new Bounds(x, y, this.width, this.height);
-	}
-
-	public Bounds newBounds(Location location) {
 		return new Bounds(location, this.width, this.height);
 	}
 
@@ -55,5 +58,21 @@ public class Size {
 		builder.append(this.height);
 		builder.append(']');
 		return builder.toString();
+	}
+
+	public static Size getInstance() {
+		return new Size();
+	}
+
+	public static Size of(int size) {
+		return new Size(size);
+	}
+
+	public static Size of(int width, int height) {
+		return new Size(width, height);
+	}
+
+	public static Size of(ISize size) {
+		return new Size(size);
 	}
 }
