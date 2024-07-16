@@ -27,13 +27,13 @@ public class Window extends RootItem {
 		this.className = className;
 	}
 
-	public void center() {
-		super.centerLocation(Toolkit.getScreenSize());
-	}
-
 	@Override
 	public native void show();
 	public native void loop();
+
+	public void center() {
+		super.centerLocation(Toolkit.getScreenSize());
+	}
 
 	public void build() {
 		if(this.built) {
@@ -44,9 +44,9 @@ public class Window extends RootItem {
 		this.built = true;
 	}
 
+	private native void buildWindow(String className, int x, int y, int width, int height);
+
 	private void renderWindow() {
 		System.out.println("Render");
 	}
-
-	private native void buildWindow(String className, int x, int y, int width, int height);
 }
