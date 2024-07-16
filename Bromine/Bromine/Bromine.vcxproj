@@ -145,7 +145,7 @@
     <ClCompile Include="Toolkit_getScreenSize.c" />
     <ClCompile Include="Window.c" />
     <ClCompile Include="WindowWindow.c" />
-    <ClCompile Include="Window_showWindow.c" />
+    <ClCompile Include="Window_show.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="exception.h" />

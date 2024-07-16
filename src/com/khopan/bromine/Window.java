@@ -32,28 +32,21 @@ public class Window extends RootItem {
 	}
 
 	@Override
-	public void show() {
-		this.showWindow();
-	}
+	public native void show();
+	public native void loop();
 
 	public void build() {
 		if(this.built) {
 			throw new RuntimeException("The window was already built");
 		}
 
-		this.buildWindow(this.className);
+		this.buildWindow(this.className, this.bounds.x, this.bounds.y, this.bounds.width, this.bounds.height);
 		this.built = true;
-	}
-
-	public void loop() {
-		this.messageLoop();
 	}
 
 	private void renderWindow() {
 		System.out.println("Render");
 	}
 
-	private native void showWindow();
-	private native void buildWindow(String className);
-	private native void messageLoop();
+	private native void buildWindow(String className, int x, int y, int width, int height);
 }

@@ -12,6 +12,35 @@ typedef struct {
 
 extern HINSTANCE globalInstance;
 
+void Window_loop(JNIEnv* const environment, const jobject windowInstance) {
+	jclass windowClass = (*environment)->GetObjectClass(environment, windowInstance);
+
+	if(!windowClass) {
+		return;
+	}
+
+	jfieldID handleField = (*environment)->GetFieldID(environment, windowClass, "handle", "J");
+
+	if(!handleField) {
+		return;
+	}
+
+	PHBROMINE bromine = (PHBROMINE) (*environment)->GetLongField(environment, windowInstance, handleField);
+	MSG message;
+
+	while(GetMessageW(&message, NULL, 0, 0)) {
+		TranslateMessage(&message);
+		DispatchMessageW(&message);
+	}
+
+	if(!UnregisterClassW(bromine->className, globalInstance)) {
+		BromineThrowWin32Error(environment, L"UnregisterClassW");
+	}
+
+	LocalFree(bromine->className);
+	LocalFree(bromine);
+}
+
 static LRESULT CALLBACK windowProcedure(HWND window, UINT message, WPARAM wparam, LPARAM lparam) {
 	PHBROMINE bromine = (PHBROMINE) GetWindowLongPtrW(window, GWLP_USERDATA);
 
@@ -43,16 +72,10 @@ static LRESULT CALLBACK windowProcedure(HWND window, UINT message, WPARAM wparam
 	return DefWindowProcW(window, message, wparam, lparam);
 }
 
-void Window_buildWindow(JNIEnv* const environment, const jobject windowInstance, const jstring className) {
+void Window_buildWindow(JNIEnv* const environment, const jobject windowInstance, const jstring className, const jint x, const jint y, const jint width, const jint height) {
 	jclass classWindow = (*environment)->GetObjectClass(environment, windowInstance);
 
 	if(!classWindow) {
-		return;
-	}
-
-	jclass itemClass = (*environment)->FindClass(environment, "com/khopan/bromine/Item");
-
-	if(!itemClass) {
 		return;
 	}
 
@@ -71,30 +94,6 @@ void Window_buildWindow(JNIEnv* const environment, const jobject windowInstance,
 	jfieldID titleField = (*environment)->GetFieldID(environment, classWindow, "title", "Ljava/lang/String;");
 
 	if(!titleField) {
-		return;
-	}
-
-	jfieldID xField = (*environment)->GetFieldID(environment, itemClass, "x", "I");
-
-	if(!xField) {
-		return;
-	}
-
-	jfieldID yField = (*environment)->GetFieldID(environment, itemClass, "y", "I");
-
-	if(!yField) {
-		return;
-	}
-
-	jfieldID widthField = (*environment)->GetFieldID(environment, itemClass, "width", "I");
-
-	if(!widthField) {
-		return;
-	}
-
-	jfieldID heightField = (*environment)->GetFieldID(environment, itemClass, "height", "I");
-
-	if(!heightField) {
 		return;
 	}
 
@@ -167,7 +166,7 @@ void Window_buildWindow(JNIEnv* const environment, const jobject windowInstance,
 
 	jobject titleObject = (*environment)->GetObjectField(environment, windowInstance, titleField);
 	const jchar* titleValue = titleObject ? (*environment)->GetStringChars(environment, titleObject, NULL) : NULL;
-	HWND window = CreateWindowExW(0L, classNameNative, titleValue, WS_OVERLAPPEDWINDOW | WS_VISIBLE, (*environment)->GetIntField(environment, windowInstance, xField), (*environment)->GetIntField(environment, windowInstance, yField), (*environment)->GetIntField(environment, windowInstance, widthField), (*environment)->GetIntField(environment, windowInstance, heightField), NULL, NULL, NULL, bromine);
+	HWND window = CreateWindowExW(0L, classNameNative, titleValue, WS_OVERLAPPEDWINDOW | WS_VISIBLE, x, y, width, height, NULL, NULL, NULL, bromine);
 
 	if(titleValue) {
 		(*environment)->ReleaseStringChars(environment, titleObject, titleValue);
@@ -178,33 +177,4 @@ void Window_buildWindow(JNIEnv* const environment, const jobject windowInstance,
 		LocalFree(classNameNative);
 		return;
 	}
-}
-
-void Window_messageLoop(JNIEnv* const environment, const jobject windowInstance) {
-	jclass windowClass = (*environment)->GetObjectClass(environment, windowInstance);
-
-	if(!windowClass) {
-		return;
-	}
-
-	jfieldID handleField = (*environment)->GetFieldID(environment, windowClass, "handle", "J");
-
-	if(!handleField) {
-		return;
-	}
-
-	PHBROMINE bromine = (PHBROMINE) (*environment)->GetLongField(environment, windowInstance, handleField);
-	MSG message;
-
-	while(GetMessageW(&message, NULL, 0, 0)) {
-		TranslateMessage(&message);
-		DispatchMessageW(&message);
-	}
-
-	if(!UnregisterClassW(bromine->className, globalInstance)) {
-		BromineThrowWin32Error(environment, L"UnregisterClassW");
-	}
-
-	LocalFree(bromine->className);
-	LocalFree(bromine);
 }
