@@ -5,7 +5,7 @@ import java.lang.annotation.Native;
 import com.khopan.bromine.render.Paint;
 import com.khopan.bromine.unit.Size;
 
-public abstract class Item<T extends Item<T>> {
+public abstract class Item {
 	@Native
 	private int x;
 
@@ -50,14 +50,12 @@ public abstract class Item<T extends Item<T>> {
 		this.y = (int) Math.round((size.height - this.height) * 0.5d);
 	}
 
-	@SuppressWarnings("unchecked")
-	public T show() {
-		return (T) this;
+	public void show() {
+
 	}
 
-	@SuppressWarnings("unchecked")
-	public T hide() {
-		return (T) this;
+	public void hide() {
+
 	}
 
 	public void render(Paint paint) {
