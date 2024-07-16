@@ -27,6 +27,10 @@ public class Window extends RootItem {
 		this.className = className;
 	}
 
+	public void center() {
+		super.centerLocation(Toolkit.getScreenSize());
+	}
+
 	@Override
 	public void show() {
 		this.showWindow();

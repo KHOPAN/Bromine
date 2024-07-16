@@ -1,6 +1,6 @@
 package com.khopan.bromine.unit;
 
-public class Location implements ILocation {
+public class Location implements IMutableLocation {
 	public int x;
 	public int y;
 
@@ -60,6 +60,38 @@ public class Location implements ILocation {
 		}
 
 		return new Bounds(this.x, this.y, size);
+	}
+
+	@Override
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	@Override
+	public void setX(ILocation location) {
+		this.x = location == null ? 0 : location.getX();
+	}
+
+	@Override
+	public void setY(int y) {
+		this.y = y;
+	}
+
+	@Override
+	public void setY(ILocation location) {
+		this.y = location == null ? 0 : location.getY();
+	}
+
+	@Override
+	public void setLocation(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+
+	@Override
+	public void setLocation(ILocation location) {
+		this.x = location == null ? 0 : location.getX();
+		this.y = location == null ? 0 : location.getY();
 	}
 
 	@Override

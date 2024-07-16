@@ -1,6 +1,6 @@
 package com.khopan.bromine.unit;
 
-public class Size implements ISize {
+public class Size implements IMutableSize {
 	public int width;
 	public int height;
 
@@ -46,6 +46,44 @@ public class Size implements ISize {
 		}
 
 		return new Bounds(location, this.width, this.height);
+	}
+
+	@Override
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	@Override
+	public void setWidth(ISize size) {
+		this.width = size == null ? 0 : size.getWidth();
+	}
+
+	@Override
+	public void setHeight(int height) {
+		this.height = height;
+	}
+
+	@Override
+	public void setHeight(ISize size) {
+		this.width = size == null ? 0 : size.getHeight();
+	}
+
+	@Override
+	public void setSize(int size) {
+		this.width = size;
+		this.height = size;
+	}
+
+	@Override
+	public void setSize(int width, int height) {
+		this.width = width;
+		this.height = height;
+	}
+
+	@Override
+	public void setSize(ISize size) {
+		this.width = size == null ? 0 : size.getWidth();
+		this.height = size == null ? 0 : size.getHeight();
 	}
 
 	@Override
