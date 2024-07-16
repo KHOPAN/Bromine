@@ -2,6 +2,8 @@ package com.khopan.bromine;
 
 import java.lang.annotation.Native;
 
+import com.khopan.bromine.render.InstructedPaint;
+
 public class Window extends RootItem {
 	@Native
 	private final long handle;
@@ -48,5 +50,8 @@ public class Window extends RootItem {
 
 	private void renderWindow() {
 		System.out.println("Render");
+		InstructedPaint paint = new InstructedPaint(list -> {});
+		paint.fillRect(0, 0, 100, 200);
+		paint.dispatch();
 	}
 }
