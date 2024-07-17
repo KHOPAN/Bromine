@@ -81,7 +81,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalDependencies>KHOPAN Library.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>KHOPAN Library.lib;Gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>D:\GitHub Repository\Hackontrol\Hackontrol\x64\Debug</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -100,7 +100,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalDependencies>KHOPAN Library.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>KHOPAN Library.lib;Gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>D:\GitHub Repository\Hackontrol\Hackontrol\x64\Release</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -115,7 +115,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalDependencies>KHOPAN Library.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>KHOPAN Library.lib;Gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>D:\GitHub Repository\Hackontrol\Hackontrol\x64\Debug</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -134,7 +134,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalDependencies>KHOPAN Library.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>KHOPAN Library.lib;Gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>D:\GitHub Repository\Hackontrol\Hackontrol\x64\Release</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>

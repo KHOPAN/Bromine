@@ -9,6 +9,7 @@ typedef struct {
 	JNIEnv* environment;
 	jobject windowInstance;
 	jmethodID renderWindowMethod;
+	void* gdiplusToken;
 } HBROMINE, *PHBROMINE;
 
 extern HINSTANCE globalInstance;
@@ -40,6 +41,7 @@ void Window_loop(JNIEnv* const environment, const jobject windowInstance) {
 
 	LocalFree(bromine->className);
 	(*environment)->DeleteGlobalRef(environment, bromine->windowInstance);
+	ShutdownRenderSystem(bromine->gdiplusToken);
 	LocalFree(bromine);
 }
 
@@ -157,10 +159,22 @@ void Window_buildWindow(JNIEnv* const environment, const jobject windowInstance,
 		return;
 	}
 
+	void* token;
+	DWORD status = InitializeRenderSystem(&token);
+
+	if(status) {
+		SetLastError(status);
+		BromineThrowWin32Error(environment, L"InitializeRenderSystem");
+		(*environment)->DeleteGlobalRef(environment, windowReference);
+		LocalFree(classNameNative);
+		return;
+	}
+
 	bromine->className = classNameNative;
 	bromine->environment = environment;
 	bromine->windowInstance = windowReference;
 	bromine->renderWindowMethod = renderWindowMethod;
+	bromine->gdiplusToken = token;
 	(*environment)->SetLongField(environment, windowInstance, handleField, (jlong) bromine);
 	WNDCLASSW windowClass = {0};
 	windowClass.style = CS_VREDRAW | CS_HREDRAW;
@@ -171,6 +185,7 @@ void Window_buildWindow(JNIEnv* const environment, const jobject windowInstance,
 
 	if(!RegisterClassW(&windowClass)) {
 		BromineThrowWin32Error(environment, L"RegisterClassW");
+		ShutdownRenderSystem(token);
 		(*environment)->DeleteGlobalRef(environment, windowReference);
 		LocalFree(classNameNative);
 		return;
@@ -186,6 +201,7 @@ void Window_buildWindow(JNIEnv* const environment, const jobject windowInstance,
 
 	if(!window) {
 		BromineThrowWin32Error(environment, L"CreateWindowExW");
+		ShutdownRenderSystem(token);
 		(*environment)->DeleteGlobalRef(environment, windowReference);
 		LocalFree(classNameNative);
 	}
