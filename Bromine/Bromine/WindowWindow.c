@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include "Window.h"
 #include "exception.h"
+#include "renderer.h"
 
 typedef struct {
 	LPWSTR className;
@@ -64,7 +65,9 @@ static LRESULT CALLBACK windowProcedure(HWND window, UINT message, WPARAM wparam
 	case WM_PAINT: {
 		PAINTSTRUCT paintStruct;
 		HDC context = BeginPaint(window, &paintStruct);
-		(*bromine->environment)->CallVoidMethod(bromine->environment, bromine->windowInstance, bromine->renderWindowMethod, (jlong) context);
+		LONG_PTR handle = InitializeRenderer(context);
+		(*bromine->environment)->CallVoidMethod(bromine->environment, bromine->windowInstance, bromine->renderWindowMethod, handle);
+		DestroyRenderer(handle);
 		EndPaint(window, &paintStruct);
 		return 0;
 	}

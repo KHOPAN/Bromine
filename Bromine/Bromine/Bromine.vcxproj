@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="exception.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="renderer.cpp" />
     <ClCompile Include="Toolkit.c" />
     <ClCompile Include="Toolkit_getScreenSize.c" />
     <ClCompile Include="Window.c" />
@@ -149,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="exception.h" />
+    <ClInclude Include="renderer.h" />
     <ClInclude Include="Toolkit.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
