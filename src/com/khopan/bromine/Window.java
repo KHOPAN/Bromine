@@ -54,6 +54,8 @@ public class Window extends RootItem {
 		InstructedPaint paint = new InstructedPaint(list -> this.dispatchRendering(handle, list));
 		paint.setColor(0xFF00FF00);
 		paint.fillRect(0, 0, 100, 200);
+		paint.setColor(0xFFFF0000);
+		paint.fillRect(200, 0, 200, 200);
 		paint.dispatch();
 	}
 }
