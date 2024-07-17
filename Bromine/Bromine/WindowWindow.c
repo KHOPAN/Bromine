@@ -38,6 +38,7 @@ void Window_loop(JNIEnv* const environment, const jobject windowInstance) {
 	}
 
 	LocalFree(bromine->className);
+	(*environment)->DeleteGlobalRef(environment, bromine->windowInstance);
 	LocalFree(bromine);
 }
 
@@ -146,9 +147,16 @@ void Window_buildWindow(JNIEnv* const environment, const jobject windowInstance,
 		return;
 	}
 
+	jobject windowReference = (*environment)->NewGlobalRef(environment, windowInstance);
+
+	if(!windowReference) {
+		LocalFree(classNameNative);
+		return;
+	}
+
 	bromine->className = classNameNative;
 	bromine->environment = environment;
-	bromine->windowInstance = windowInstance;
+	bromine->windowInstance = windowReference;
 	bromine->renderWindowMethod = renderWindowMethod;
 	(*environment)->SetLongField(environment, windowInstance, handleField, (jlong) bromine);
 	WNDCLASSW windowClass = {0};
@@ -160,6 +168,7 @@ void Window_buildWindow(JNIEnv* const environment, const jobject windowInstance,
 
 	if(!RegisterClassW(&windowClass)) {
 		BromineThrowWin32Error(environment, L"RegisterClassW");
+		(*environment)->DeleteGlobalRef(environment, windowReference);
 		LocalFree(classNameNative);
 		return;
 	}
@@ -174,11 +183,15 @@ void Window_buildWindow(JNIEnv* const environment, const jobject windowInstance,
 
 	if(!window) {
 		BromineThrowWin32Error(environment, L"CreateWindowExW");
+		(*environment)->DeleteGlobalRef(environment, windowReference);
 		LocalFree(classNameNative);
-		return;
 	}
 }
 
 void Window_dispatchRendering(JNIEnv* const environment, const jobject windowInstance, const jlong handle, const jobjectArray instructions) {
 	jsize length = (*environment)->GetArrayLength(environment, instructions);
+
+	for(jsize i = 0; i < length; i++) {
+		jobject paintInstructionInstance = (*environment)->GetObjectArrayElement(environment, instructions, i);
+	}
 }
