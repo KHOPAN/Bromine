@@ -216,50 +216,22 @@ void Window_dispatchRendering(JNIEnv* const environment, const jobject windowIns
 		return;
 	}
 
-	jfieldID commandField = (*environment)->GetFieldID(environment, paintInstructionClass, "command", "I");
-
-	if(!commandField) {
-		return;
-	}
-
-	jfieldID colorField = (*environment)->GetFieldID(environment, paintInstructionClass, "color", "I");
-
-	if(!colorField) {
-		return;
-	}
-
-	jfieldID xField = (*environment)->GetFieldID(environment, paintInstructionClass, "x", "I");
-
-	if(!xField) {
-		return;
-	}
-
-	jfieldID yField = (*environment)->GetFieldID(environment, paintInstructionClass, "y", "I");
-
-	if(!yField) {
-		return;
-	}
-
-	jfieldID widthField = (*environment)->GetFieldID(environment, paintInstructionClass, "width", "I");
-
-	if(!widthField) {
-		return;
-	}
-
-	jfieldID heightField = (*environment)->GetFieldID(environment, paintInstructionClass, "height", "I");
-
-	if(!heightField) {
-		return;
-	}
-
+#define FIELD(x,y) jfieldID y;do{y=(*environment)->GetFieldID(environment,paintInstructionClass,x,"I");if(!y)return;}while(0)
+	FIELD("command", commandField);
+	FIELD("color",   colorField);
+	FIELD("x",       xField);
+	FIELD("y",       yField);
+	FIELD("width",   widthField);
+	FIELD("height",  heightField);
 	jsize length = (*environment)->GetArrayLength(environment, instructions);
 
 	for(jsize i = 0; i < length; i++) {
 		jobject paintInstructionInstance = (*environment)->GetObjectArrayElement(environment, instructions, i);
+#define GET(x) (*environment)->GetIntField(environment,paintInstructionInstance,x)
 	
 		switch((*environment)->GetIntField(environment, paintInstructionInstance, commandField)) {
 		case COMMAND_RECTANGLE_FILL:
-			RendererFillRectangle(handle, (*environment)->GetIntField(environment, paintInstructionInstance, colorField), (*environment)->GetIntField(environment, paintInstructionInstance, xField), (*environment)->GetIntField(environment, paintInstructionInstance, yField), (*environment)->GetIntField(environment, paintInstructionInstance, widthField), (*environment)->GetIntField(environment, paintInstructionInstance, heightField));
+			RendererFillRectangle(handle, GET(colorField), GET(xField), GET(yField), GET(widthField), GET(heightField));
 			break;
 		}
 	}
