@@ -4,6 +4,8 @@
 #include "exception.h"
 #include "renderer.h"
 
+#define COMMAND_RECTANGLE_FILL 1
+
 typedef struct {
 	LPWSTR className;
 	JNIEnv* environment;
@@ -208,9 +210,57 @@ void Window_buildWindow(JNIEnv* const environment, const jobject windowInstance,
 }
 
 void Window_dispatchRendering(JNIEnv* const environment, const jobject windowInstance, const jlong handle, const jobjectArray instructions) {
+	jclass paintInstructionClass = (*environment)->FindClass(environment, "com/khopan/bromine/render/PaintInstruction");
+
+	if(!paintInstructionClass) {
+		return;
+	}
+
+	jfieldID commandField = (*environment)->GetFieldID(environment, paintInstructionClass, "command", "I");
+
+	if(!commandField) {
+		return;
+	}
+
+	jfieldID colorField = (*environment)->GetFieldID(environment, paintInstructionClass, "color", "I");
+
+	if(!colorField) {
+		return;
+	}
+
+	jfieldID xField = (*environment)->GetFieldID(environment, paintInstructionClass, "x", "I");
+
+	if(!xField) {
+		return;
+	}
+
+	jfieldID yField = (*environment)->GetFieldID(environment, paintInstructionClass, "y", "I");
+
+	if(!yField) {
+		return;
+	}
+
+	jfieldID widthField = (*environment)->GetFieldID(environment, paintInstructionClass, "width", "I");
+
+	if(!widthField) {
+		return;
+	}
+
+	jfieldID heightField = (*environment)->GetFieldID(environment, paintInstructionClass, "height", "I");
+
+	if(!heightField) {
+		return;
+	}
+
 	jsize length = (*environment)->GetArrayLength(environment, instructions);
 
 	for(jsize i = 0; i < length; i++) {
 		jobject paintInstructionInstance = (*environment)->GetObjectArrayElement(environment, instructions, i);
+	
+		switch((*environment)->GetIntField(environment, paintInstructionInstance, commandField)) {
+		case COMMAND_RECTANGLE_FILL:
+			RendererFillRectangle(handle, (*environment)->GetIntField(environment, paintInstructionInstance, colorField), (*environment)->GetIntField(environment, paintInstructionInstance, xField), (*environment)->GetIntField(environment, paintInstructionInstance, yField), (*environment)->GetIntField(environment, paintInstructionInstance, widthField), (*environment)->GetIntField(environment, paintInstructionInstance, heightField));
+			break;
+		}
 	}
 }
