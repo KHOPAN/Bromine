@@ -18,6 +18,9 @@
     <ClInclude Include="bromine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="bromine_error.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="initialize.c">

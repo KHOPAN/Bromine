@@ -1,12 +1,11 @@
-#include <Windows.h>
 #include "bromine.h"
 
-void BromineInitialize() {
+DWORD BromineInitialize() {
 	WNDCLASSEXW windowClass = {0};
 	windowClass.cbSize = sizeof(WNDCLASSEXW);
-	RegisterClassExW(&windowClass);
+	return RegisterClassExW(&windowClass) ? BROMINE_ERROR_SUCCESS : BROMINE_ERROR_WIN32;
 }
 
-void BromineCleanup() {
-
+DWORD BromineCleanup() {
+	return BROMINE_ERROR_FUNCTION_FAILED;
 }

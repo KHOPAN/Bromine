@@ -132,6 +132,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="bromine.h" />
+    <ClInclude Include="bromine_error.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="initialize.c" />

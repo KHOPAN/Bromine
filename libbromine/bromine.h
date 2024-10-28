@@ -1,13 +1,16 @@
 #pragma once
 
+#include <Windows.h>
+#include "bromine_error.h"
+
 #define BROMINE_CLASS L"BromineClass"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void BromineInitialize();
-void BromineCleanup();
+DWORD BromineInitialize();
+DWORD BromineCleanup();
 
 #ifdef __cplusplus
 }
