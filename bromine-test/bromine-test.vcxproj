@@ -133,6 +133,11 @@
   <ItemGroup>
     <ClCompile Include="main.c" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\libbromine\libbromine.vcxproj">
+      <Project>{c6962dcf-9823-40a2-836e-0ef77614e5ac}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
