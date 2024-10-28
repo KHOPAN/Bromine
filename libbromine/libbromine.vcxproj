@@ -134,7 +134,7 @@
     <ClInclude Include="bromine.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="bromine.c" />
+    <ClCompile Include="initialize.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

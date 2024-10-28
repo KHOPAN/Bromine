@@ -20,7 +20,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="bromine.c">
+    <ClCompile Include="initialize.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

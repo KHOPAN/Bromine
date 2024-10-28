@@ -1,6 +1,6 @@
-#include <stdio.h>
+#include <bromine.h>
 
 int main(int argc, char** argv) {
-	printf("Hello, world!\n");
+	BromineInitialize();
 	return 0;
 }
