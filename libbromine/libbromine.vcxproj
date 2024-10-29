@@ -135,6 +135,7 @@
     <ClInclude Include="bromine_error.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="bromine_error.c" />
     <ClCompile Include="initialize.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
