@@ -11,5 +11,15 @@ int main(int argc, char** argv) {
 		return 1;
 	}
 
-	return 0;
+	int codeExit = 1;
+	codeExit = 0;
+cleanup:
+	error = BromineCleanup();
+
+	if(BROMINE_FAILED(error)) {
+		PRINT_ERROR;
+		codeExit = 1;
+	}
+
+	return codeExit;
 }

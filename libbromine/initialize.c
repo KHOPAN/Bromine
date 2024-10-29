@@ -9,5 +9,5 @@ BROMINEERROR BromineInitialize() {
 }
 
 BROMINEERROR BromineCleanup() {
-	return BROMINE_ERROR_FUNCTION_FAILED;
+	return UnregisterClassW(BROMINE_CLASS, NULL) ? BROMINE_ERROR_SUCCESS : BROMINE_ERROR_WIN32;
 }
