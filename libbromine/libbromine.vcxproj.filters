@@ -23,7 +23,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="initialize.c">
+    <ClCompile Include="bromine.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="bromine_error.c">

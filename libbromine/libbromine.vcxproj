@@ -136,7 +136,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bromine_error.c" />
-    <ClCompile Include="initialize.c" />
+    <ClCompile Include="bromine.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
