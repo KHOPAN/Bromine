@@ -3,6 +3,10 @@
 
 #define PRINT_ERROR printf("Bromine Error: %ws\n", BromineGetErrorMessage(error))
 
+static void CALLBACK bromineInitialize(const LPVOID parameter) {
+	printf("Initialize\n");
+}
+
 int main(int argc, char** argv) {
 	BROMINEERROR error = BromineInitialize();
 
@@ -11,7 +15,9 @@ int main(int argc, char** argv) {
 		return 1;
 	}
 
-	HWND window = CreateWindowExW(0, BROMINE_CLASS, L"Bromine", WS_OVERLAPPEDWINDOW | WS_VISIBLE, 100, 100, 400, 400, NULL, NULL, NULL, NULL);
+	BROMINECREATEPARAMETER parameter = {0};
+	parameter.function = bromineInitialize;
+	HWND window = CreateWindowExW(0, BROMINE_CLASS, L"Bromine", WS_OVERLAPPEDWINDOW | WS_VISIBLE, 100, 100, 400, 400, NULL, NULL, NULL, &parameter);
 	int codeExit = 1;
 
 	if(!window) {

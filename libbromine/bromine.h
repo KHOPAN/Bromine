@@ -4,6 +4,13 @@
 
 #define BROMINE_CLASS L"BromineDrawSurface"
 
+typedef void(CALLBACK* BROMINECREATEFUNCTION) (const LPVOID parameter);
+
+typedef struct {
+	BROMINECREATEFUNCTION function;
+	LPVOID parameter;
+} BROMINECREATEPARAMETER, *PBROMINECREATEPARAMETER;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
