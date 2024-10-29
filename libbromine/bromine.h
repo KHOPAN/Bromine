@@ -2,7 +2,7 @@
 
 #include "bromine_error.h"
 
-#define BROMINE_CLASS L"BromineClass"
+#define BROMINE_CLASS L"BromineDrawSurface"
 
 #ifdef __cplusplus
 extern "C" {
