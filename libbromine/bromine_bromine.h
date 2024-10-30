@@ -11,6 +11,7 @@ typedef struct _BROMINE RAWBROMINE, *BROMINE, **PBROMINE;
 struct _BROMINE {
 	BOOL rootBromine;
 	BOUNDS bounds;
+	void(CALLBACK* renderer) (const BROMINE bromine, const HDC context, const PRECT bounds);
 };
 
 struct _ROOTBROMINE {
@@ -26,6 +27,8 @@ extern "C" {
 BROMINEERROR BromineNewBromine(const PBROMINE bromine, const BOOL rootBromine);
 BROMINEERROR BromineFreeBromine(const BROMINE bromine);
 BROMINEERROR BromineAddBromine(const ROOTBROMINE bromine, const BROMINE child);
+
+void BromineDefaultRootRenderer(const BROMINE bromine, const HDC context, const PRECT bounds);
 #ifdef __cplusplus
 }
 #endif

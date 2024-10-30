@@ -35,12 +35,26 @@ static LRESULT CALLBACK procedure(_In_ HWND window, _In_ UINT message, _In_ WPAR
 		return DefWindowProcW(window, message, wparam, lparam);
 	}
 
+	PAINTSTRUCT paintStruct = {0};
+	RECT bounds;
+	HDC context;
+
 	switch(message) {
 	case WM_CLOSE:
 		BromineFreeBromine((BROMINE) data->bromine);
 		HeapFree(GetProcessHeap(), 0, data);
 		SetWindowLongPtrW(window, GWLP_USERDATA, 0);
 		break;
+	case WM_PAINT:
+		GetClientRect(window, &bounds);
+		context = BeginPaint(window, &paintStruct);
+
+		if(data->bromine->bromine.renderer) {
+			data->bromine->bromine.renderer((BROMINE) data->bromine, context, &bounds);
+		}
+
+		EndPaint(window, &paintStruct);
+		return 0;
 	}
 
 	return DefWindowProcW(window, message, wparam, lparam);

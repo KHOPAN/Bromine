@@ -15,6 +15,7 @@ BROMINEERROR BromineNewBromine(const PBROMINE bromine, const BOOL rootBromine) {
 	buffer->bromine.rootBromine = rootBromine ? TRUE : FALSE;
 
 	if(rootBromine) {
+		buffer->bromine.renderer = BromineDefaultRootRenderer;
 		buffer->child = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(BROMINE) * ROOT_BROMINE_CAPACITY);
 
 		if(!buffer->child) {
@@ -75,4 +76,22 @@ BROMINEERROR BromineAddBromine(const ROOTBROMINE bromine, const BROMINE child) {
 	bromine->child[bromine->childCount] = child;
 	bromine->childCount++;
 	return BROMINE_ERROR_SUCCESS;
+}
+
+void BromineDefaultRootRenderer(const BROMINE bromine, const HDC context, const PRECT bounds) {
+	if(!bromine->rootBromine) {
+		return;
+	}
+
+	RECT area;
+
+	for(ULONG i = 0; i < ((ROOTBROMINE) bromine)->childCount; i++) {
+		if(((ROOTBROMINE) bromine)->child[i]->renderer && ((ROOTBROMINE) bromine)->child[i]->bounds.x < bounds->right && ((ROOTBROMINE) bromine)->child[i]->bounds.x + ((ROOTBROMINE) bromine)->child[i]->bounds.width > bounds->left && ((ROOTBROMINE) bromine)->child[i]->bounds.y < bounds->bottom && ((ROOTBROMINE) bromine)->child[i]->bounds.y + ((ROOTBROMINE) bromine)->child[i]->bounds.height > bounds->top) {
+			area.left = ((ROOTBROMINE) bromine)->child[i]->bounds.x;
+			area.top = ((ROOTBROMINE) bromine)->child[i]->bounds.y;
+			area.right = ((ROOTBROMINE) bromine)->child[i]->bounds.x + ((ROOTBROMINE) bromine)->child[i]->bounds.width;
+			area.bottom = ((ROOTBROMINE) bromine)->child[i]->bounds.y + ((ROOTBROMINE) bromine)->child[i]->bounds.height;
+			((ROOTBROMINE) bromine)->child[i]->renderer(((ROOTBROMINE) bromine)->child[i], context, &area);
+		}
+	}
 }
