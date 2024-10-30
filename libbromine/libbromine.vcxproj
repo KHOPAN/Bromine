@@ -132,9 +132,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="bromine.h" />
+    <ClInclude Include="bromine_bromine.h" />
     <ClInclude Include="bromine_error.h" />
+    <ClInclude Include="bromine_type.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="bromine_bromine.c" />
     <ClCompile Include="bromine_error.c" />
     <ClCompile Include="bromine.c" />
   </ItemGroup>

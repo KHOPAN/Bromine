@@ -6,6 +6,8 @@ LPCWSTR BromineGetErrorMessage(const BROMINEERROR error) {
 		return L"An operation completed successfully";
 	case BROMINE_ERROR_FUNCTION_FAILED:
 		return L"Function cannot be completed";
+	case BROMINE_ERROR_INVALID_PARAMETER:
+		return L"One or more parameter is invalid";
 	case BROMINE_ERROR_WIN32:
 		return L"Win32 error occurred";
 	}

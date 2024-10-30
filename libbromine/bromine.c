@@ -1,23 +1,21 @@
 #include "bromine.h"
 
+static int initializeBromine(const PBROMINECREATEPARAMETER parameter) {
+	ROOTBROMINE bromine;
+	BROMINEERROR error = BromineNewBromine((PBROMINE) &bromine, TRUE);
+
+	if(BROMINE_FAILED(error)) {
+		return -1;
+	}
+
+	parameter->function(bromine, parameter->parameter);
+	return 0;
+}
+
 static LRESULT CALLBACK procedure(_In_ HWND window, _In_ UINT message, _In_ WPARAM wparam, _In_ LPARAM lparam) {
 	switch(message) {
-	case WM_CREATE: {
-		PBROMINECREATEPARAMETER parameter = ((LPCREATESTRUCTW) lparam)->lpCreateParams;
-		parameter->function(parameter->parameter);
-		return 0;
-	}
-	case WM_PAINT: {
-		PAINTSTRUCT paintStruct;
-		HDC context = BeginPaint(window, &paintStruct);
-		HBRUSH brush = GetStockObject(DC_BRUSH);
-		SetDCBrushColor(context, RGB(0, 255, 0));
-		RECT bounds;
-		GetClientRect(window, &bounds);
-		FillRect(context, &bounds, brush);
-		EndPaint(window, &paintStruct);
-		return 0;
-	}
+	case WM_CREATE:
+		return initializeBromine((PBROMINECREATEPARAMETER) ((LPCREATESTRUCTW) lparam)->lpCreateParams);
 	}
 
 	return DefWindowProcW(window, message, wparam, lparam);

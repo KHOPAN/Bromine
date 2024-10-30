@@ -3,8 +3,8 @@
 
 #define PRINT_ERROR printf("Bromine Error: %ws\n", BromineGetErrorMessage(error))
 
-static void CALLBACK bromineInitialize(const LPVOID parameter) {
-	printf("Initialize\n");
+static void CALLBACK bromineInitialize(const ROOTBROMINE bromine, const LPVOID parameter) {
+	printf("Initialize: %p\n", bromine);
 }
 
 int main(int argc, char** argv) {

@@ -21,12 +21,21 @@
     <ClInclude Include="bromine_error.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="bromine_type.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bromine_bromine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bromine.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="bromine_error.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bromine_bromine.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
