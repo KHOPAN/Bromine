@@ -35,8 +35,15 @@ BROMINEERROR BromineFreeBromine(const BROMINE bromine) {
 		return BROMINE_ERROR_INVALID_PARAMETER;
 	}
 
-	if(bromine->rootBromine && !HeapFree(GetProcessHeap(), 0, ((ROOTBROMINE) bromine)->child)) {
-		return BROMINE_ERROR_WIN32;
+	if(bromine->rootBromine) {
+		for(ULONG i = 0; i < ((ROOTBROMINE) bromine)->childCount; i++) {
+			BROMINEERROR error = BromineFreeBromine(((ROOTBROMINE) bromine)->child[i]);
+			if(BROMINE_FAILED(error)) return error;
+		}
+
+		if(!HeapFree(GetProcessHeap(), 0, ((ROOTBROMINE) bromine)->child)) {
+			return BROMINE_ERROR_WIN32;
+		}
 	}
 
 	return HeapFree(GetProcessHeap(), 0, bromine) ? BROMINE_ERROR_SUCCESS : BROMINE_ERROR_WIN32;
