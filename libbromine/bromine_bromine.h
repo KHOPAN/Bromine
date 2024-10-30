@@ -6,6 +6,8 @@ typedef struct _BROMINE RAWBROMINE, *BROMINE, **PBROMINE;
 #include "bromine_error.h"
 #include "bromine_type.h"
 
+#define ROOT_BROMINE_CAPACITY 8
+
 struct _BROMINE {
 	BOOL rootBromine;
 	BOUNDS bounds;
@@ -23,7 +25,7 @@ extern "C" {
 #endif
 BROMINEERROR BromineNewBromine(const PBROMINE bromine, const BOOL rootBromine);
 BROMINEERROR BromineFreeBromine(const BROMINE bromine);
-//BROMINEERROR BromineAddBromine(const ROOTBROMINE bromine, const BROMINE child);
+BROMINEERROR BromineAddBromine(const ROOTBROMINE bromine, const BROMINE child);
 #ifdef __cplusplus
 }
 #endif

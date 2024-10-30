@@ -10,6 +10,6 @@ typedef struct {
 } BOUNDS, *PBOUNDS;
 
 typedef struct {
-	void(CALLBACK* function) (const ROOTBROMINE bromine, const LPVOID parameter);
+	BOOL(CALLBACK* function) (const ROOTBROMINE bromine, const LPVOID parameter);
 	LPVOID parameter;
 } BROMINECREATEPARAMETER, *PBROMINECREATEPARAMETER;

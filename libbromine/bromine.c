@@ -18,8 +18,7 @@ static int initializeBromine(const HWND window, const PBROMINECREATEPARAMETER pa
 		goto freeData;
 	}
 
-	parameter->function(data->bromine, parameter->parameter);
-	return 0;
+	return parameter->function(data->bromine, parameter->parameter) ? 0 : -1;
 freeData:
 	HeapFree(GetProcessHeap(), 0, data);
 	return -1;
