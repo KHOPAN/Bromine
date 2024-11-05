@@ -50,7 +50,21 @@ void GraphicsRender(void* data) {
 	}
 
 	graphics->target->BeginDraw();
-	graphics->target->EndDraw();
+	ID2D1SolidColorBrush* brush;
+	HRESULT result = graphics->target->CreateSolidColorBrush(D2D1::ColorF(0.0f, 1.0f, 0.0f), &brush);
+
+	if(FAILED(result)) {
+		printf("ID2D1HwndRenderTarget::CreateSolidColorBrush() failed\n");
+		goto drawEnd;
+	}
+
+	graphics->target->DrawEllipse(D2D1::Ellipse(D2D1::Point2F(100.0f, 100.0f), 20.0f, 20.0f), brush);
+drawEnd:
+	result = graphics->target->EndDraw();
+
+	if(FAILED(result)) {
+		printf("ID2D1HwndRenderTarget::EndDraw() failed\n");
+	}
 }
 
 void GraphicsUninitialize(void* data) {
