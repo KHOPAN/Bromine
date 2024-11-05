@@ -42,6 +42,17 @@ freeGraphics:
 	return FALSE;
 }
 
+void GraphicsRender(void* data) {
+	PGRAPHICSDATA graphics = reinterpret_cast<PGRAPHICSDATA>(data);
+
+	if(!graphics) {
+		return;
+	}
+
+	graphics->target->BeginDraw();
+	graphics->target->EndDraw();
+}
+
 void GraphicsUninitialize(void* data) {
 	PGRAPHICSDATA graphics = reinterpret_cast<PGRAPHICSDATA>(data);
 

@@ -3,10 +3,15 @@
 
 #define CLASS_NAME L"DirectXSampleClass"
 
+static void* graphicsData;
+
 LRESULT CALLBACK procedure(_In_ HWND window, _In_ UINT message, _In_ WPARAM wparam, _In_ LPARAM lparam) {
 	switch(message) {
 	case WM_DESTROY:
 		PostQuitMessage(0);
+		return 0;
+	case WM_PAINT:
+		GraphicsRender(graphicsData);
 		return 0;
 	}
 
@@ -34,9 +39,7 @@ int main(int argc, char** argv) {
 		goto unregisterClass;
 	}
 
-	void* data;
-
-	if(!GraphicsInitialize(window, &data)) {
+	if(!GraphicsInitialize(window, &graphicsData)) {
 		goto unregisterClass;
 	}
 
@@ -48,7 +51,7 @@ int main(int argc, char** argv) {
 		DispatchMessageW(&message);
 	}
 
-	GraphicsUninitialize(data);
+	GraphicsUninitialize(graphicsData);
 unregisterClass:
 	UnregisterClassW(CLASS_NAME, instance);
 	return 0;

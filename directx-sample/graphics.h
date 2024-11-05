@@ -7,6 +7,7 @@
 extern "C" {
 #endif
 BOOL GraphicsInitialize(const HWND window, const void** data);
+void GraphicsRender(void* data);
 void GraphicsUninitialize(void* data);
 #ifdef __cplusplus
 }
