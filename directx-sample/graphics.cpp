@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include "graphics.h"
 
+#define RANDOM_COLOR_FLOAT (((float)(rand()%255))/255.0f)
+
 typedef struct {
 	ID2D1Factory* factory;
 	ID2D1HwndRenderTarget* target;
@@ -51,14 +53,14 @@ void GraphicsRender(void* data) {
 
 	graphics->target->BeginDraw();
 	ID2D1SolidColorBrush* brush;
-	HRESULT result = graphics->target->CreateSolidColorBrush(D2D1::ColorF(0.0f, 1.0f, 0.0f), &brush);
+	HRESULT result = graphics->target->CreateSolidColorBrush(D2D1::ColorF(RANDOM_COLOR_FLOAT, RANDOM_COLOR_FLOAT, RANDOM_COLOR_FLOAT), &brush);
 
 	if(FAILED(result)) {
 		printf("ID2D1HwndRenderTarget::CreateSolidColorBrush() failed\n");
 		goto drawEnd;
 	}
 
-	graphics->target->DrawEllipse(D2D1::Ellipse(D2D1::Point2F(100.0f, 100.0f), 20.0f, 20.0f), brush);
+	graphics->target->FillEllipse(D2D1::Ellipse(D2D1::Point2F(200.0f, 200.0f), 50.0f, 50.0f), brush);
 drawEnd:
 	result = graphics->target->EndDraw();
 
