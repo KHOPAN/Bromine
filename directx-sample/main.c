@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <Windows.h>
+#include "graphics.h"
 
 #define CLASS_NAME L"DirectXSampleClass"
 
@@ -27,17 +27,28 @@ int main(int argc, char** argv) {
 		return 1;
 	}
 
-	if(!CreateWindowExW(0, CLASS_NAME, L"DirectX Sample", WS_OVERLAPPEDWINDOW | WS_VISIBLE, CW_USEDEFAULT, CW_USEDEFAULT, 600, 400, NULL, NULL, instance, NULL)) {
+	HWND window = CreateWindowExW(0, CLASS_NAME, L"DirectX Sample", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 600, 400, NULL, NULL, instance, NULL);
+
+	if(!window) {
 		printf("CreateWindowExW() failed: %lu\n", GetLastError());
 		goto unregisterClass;
 	}
 
+	void* data;
+
+	if(!GraphicsInitialize(window, &data)) {
+		goto unregisterClass;
+	}
+
+	ShowWindow(window, SW_NORMAL);
 	MSG message;
 
 	while(GetMessageW(&message, NULL, 0, 0)) {
 		TranslateMessage(&message);
 		DispatchMessageW(&message);
 	}
+
+	GraphicsUninitialize(data);
 unregisterClass:
 	UnregisterClassW(CLASS_NAME, instance);
 	return 0;
